@@ -36,6 +36,7 @@ namespace PluginVK
                         Id = cr.Decrypt(crypted_id, "ididitjustforlulz");
                         Token = cr.Decrypt(sr.ReadLine(), "ididitjustforlulz");
                     }
+
                 }
 
                 // Проверка существования данных.
