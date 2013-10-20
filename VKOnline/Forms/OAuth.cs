@@ -1,69 +1,74 @@
 ﻿using System;
-using System.IO;
-using System.Text;
 using System.Windows.Forms;
 
-namespace PluginVK
+namespace Rainmeter.Forms
 {
+    /// <summary>
+    ///     Get Token and Id.
+    /// </summary>
     public partial class OAuth : Form
     {
-        string token = null;
-        string id = null;
+        /// <summary>
+        ///     Get your Token (Use after OAuthRun()).
+        /// </summary>
+        public static string Token;
 
+        /// <summary>
+        ///     Get your Id (Use after OAuthRun()).
+        /// </summary>
+        public static string Id;
+
+        private OAuth()
+        {
+            InitializeComponent();
+            webBrowser1.Navigate(Url);
+        }
+
+        private static string Url
+        {
+            get
+            {
+                return "https://oauth.vk.com/authorize?client_id=3328403"
+                       + "&redirect_uri=https://oauth.vk.com/blank.html"
+                       + "&scope=audio&display=popup&response_type=token"
+#if DEBUG
+ + "&revoke=1";
+#else
+                       + "&revoke=0";
+#endif
+            }
+        }
+
+        /// <summary>
+        ///     Run Form.
+        /// </summary>
         public static void OAuthRun()
         {
             Application.Run(new OAuth());
         }
 
-
-        public OAuth()
-        {
-            InitializeComponent();
-
-            // Переход по ссылке.
-            string url = "https://oauth.vk.com/authorize?client_id=3328403"
-                + "&redirect_uri=https://oauth.vk.com/blank.html"
-                + "&scope=friends,messages,audio&display=popup&response_type=token";
-            webBrowser1.Navigate(url);
-            return;
-        }
-
-        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            // Изъятие из URL строки.
-            string url = webBrowser1.Url.ToString();
-            string l = url.Split('#')[1];
-
-            // Нахождение токена, временя действия токена и id.
-            token = l.Split('&')[0].Split('=')[1];
-            id = l.Split('=')[3];
-            Crypto cr = new Crypto();
-            string crypto_token = cr.Encrypt(token, "ididitjustforlulz");
-            string crypto_id = cr.Encrypt(id, "ididitjustforlulz");
-
-            using (FileStream fs = File.OpenWrite(Constants.path_data))
-            {
-                // Перевод id в байты.
-                string idnl = crypto_id + Environment.NewLine;
-                byte[] idbyte = UTF8Encoding.UTF8.GetBytes(idnl);
-
-                // Запись id в файл.
-                fs.Write(idbyte, 0, idbyte.Length);
-
-                // Создание байтового токена.
-                byte[] info =
-                    new UTF8Encoding(true).GetBytes(crypto_token);
-
-                // Запись токена в файл.
-                fs.Write(info, 0, info.Length);
-            }
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            Verification.Token = token;
-            Verification.Id = id;
-            this.Close();
+            Close();
+        }
+
+        private void webBrowser1_Navigated(object sender, WebBrowserNavigatedEventArgs e)
+        {
+            if (webBrowser1.Url.ToString() == Url)
+            {
+                WindowState = FormWindowState.Normal;
+            }
+            else SaveData();
+        }
+
+        private void SaveData()
+        {
+            string data = webBrowser1.Url.ToString().Split('#')[1];
+
+            Token = data.Split('&')[0].Split('=')[1];
+            Id = data.Split('=')[3];
+
+            Close();
         }
     }
 }

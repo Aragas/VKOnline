@@ -1,47 +1,42 @@
 ﻿using System;
 using System.Xml;
 
-namespace PluginVK
+namespace Rainmeter.Methods
 {
     public class Messages
     {
-        public string token { get; set; }
-        public string id { get; set; }
+        /// <summary>
+        ///     Set your Token.
+        /// </summary>
+        public string Token { private get; set; }
 
-        public string UnReadedMessages()
+        /// <summary>
+        ///     Set your Id.
+        /// </summary>
+        public string Id { private get; set; }
+
+        public int UnReadMessages()
         {
             // Параметры.
-            string method = "messages.get.xml?";
-            string param = "&filters=1";
+            const string method = "messages.get.xml?";
+            const string param = "&filters=1";
 
             XmlDocument doc = new XmlDocument();
-            doc.Load("https://api.vk.com/method/" + method + param + "&access_token=" + token);
-
-            XmlNode root = doc.DocumentElement;
+            doc.Load("https://api.vk.com/method/" + method + param + "&access_token=" + Token);
 
             #region ErrorCheck
-            XmlNodeList nodeListError;
-            nodeListError = root.SelectNodes("error_code"); // Для выявления ошибочного запроса.
 
-            // Выявление ошибочного запрса.
-            string sucheck = "";
-            string sucheckerror = "<error_code>5</error_code>";
-            string sucheckerror2 = "<error_code>7</error_code>";
+            XmlNode root = doc.DocumentElement;
+            XmlNodeList nodeListError = root.SelectNodes("error_code");
+
+            const string checkerror = "<error_code>5</error_code>";
+            const string checkerror2 = "<error_code>7</error_code>";
 
             foreach (XmlNode node in nodeListError)
             {
-                sucheck = node.OuterXml;
+                if (node.OuterXml.Equals(checkerror) || node.OuterXml.Equals(checkerror2)) return 0;
             }
 
-            if (sucheck == sucheckerror)
-            {
-                return null;
-            }
-
-            if (sucheck == sucheckerror2)
-            {
-                return null;
-            }
             #endregion
 
             string countstring = "0";
@@ -52,15 +47,7 @@ namespace PluginVK
             }
             catch { }
 
-            int i = Convert.ToInt32(countstring);
-            if (i > 1)
-            {
-                i = 1;
-            }
-
-            countstring = Convert.ToString(i);
-
-            return countstring;
+            return Convert.ToInt32(countstring);
         }
 
     }
