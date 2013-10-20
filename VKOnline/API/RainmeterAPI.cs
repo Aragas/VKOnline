@@ -19,46 +19,13 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Rainmeter
+namespace Rainmeter.API
 {
     /// <summary>
-    /// Wrapper around the Rainmeter C API.
+    ///     Wrapper around the Rainmeter C API.
     /// </summary>
-    public class API
+    public class RainmeterAPI
     {
-        private IntPtr m_Rm;
-
-        public API(IntPtr rm)
-        {
-            m_Rm = rm;
-        }
-
-        public static unsafe char* ToUnsafe(string s)
-        {
-            fixed (char* p = s) return p;
-        }
-
-        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
-        private extern static unsafe char* RmReadString(void* rm, char* option, char* defValue, int replaceMeasures);
-
-        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
-        private extern static unsafe double RmReadFormula(void* rm, char* option, double defValue);
-
-        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
-        private extern static unsafe char* RmReplaceVariables(void* rm, char* str);
-
-        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
-        private extern static unsafe char* RmPathToAbsolute(void* rm, char* relativePath);
-
-        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
-        private extern static unsafe void RmExecute(void* rm, char* command);
-
-        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
-        private extern static unsafe void* RmGet(void* rm, int type);
-
-        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        private extern static unsafe int LSLog(int type, char* unused, char* message);
-
         public enum LogType
         {
             Error = 1,
@@ -67,82 +34,104 @@ namespace Rainmeter
             Debug = 4
         }
 
+        private readonly IntPtr _mRm;
+
+        public RainmeterAPI(IntPtr rm)
+        {
+            _mRm = rm;
+        }
+
+        private static unsafe char* ToUnsafe(string s)
+        {
+            fixed (char* p = s) return p;
+        }
+
+        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
+        private static extern unsafe char* RmReadString(void* rm, char* option, char* defValue, int replaceMeasures);
+
+        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
+        private static extern unsafe double RmReadFormula(void* rm, char* option, double defValue);
+
+        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
+        private static extern unsafe char* RmReplaceVariables(void* rm, char* str);
+
+        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
+        private static extern unsafe char* RmPathToAbsolute(void* rm, char* relativePath);
+
+        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
+        private static extern unsafe void RmExecute(void* rm, char* command);
+
+        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto)]
+        private static extern unsafe void* RmGet(void* rm, int type);
+
+        [DllImport("Rainmeter.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        private static extern unsafe int LSLog(int type, char* unused, char* message);
+
         public unsafe string ReadString(string option, string defValue, bool replaceMeasures = true)
         {
-            char* value = RmReadString((void*)m_Rm, ToUnsafe(option), ToUnsafe(defValue), replaceMeasures ? 1 : 0);
+            char* value = RmReadString((void*) _mRm, ToUnsafe(option), ToUnsafe(defValue), replaceMeasures ? 1 : 0);
             return new string(value);
         }
 
         public unsafe string ReadPath(string option, string defValue)
         {
-            char* relativePath = RmReadString((void*)m_Rm, ToUnsafe(option), ToUnsafe(defValue), 1);
-            char* value = RmPathToAbsolute((void*)m_Rm, relativePath);
+            char* relativePath = RmReadString((void*) _mRm, ToUnsafe(option), ToUnsafe(defValue), 1);
+            char* value = RmPathToAbsolute((void*) _mRm, relativePath);
             return new string(value);
         }
 
         public unsafe double ReadDouble(string option, double defValue)
         {
-            return RmReadFormula((void*)m_Rm, ToUnsafe(option), defValue);
+            return RmReadFormula((void*) _mRm, ToUnsafe(option), defValue);
         }
 
         public unsafe int ReadInt(string option, int defValue)
         {
-            return (int)RmReadFormula((void*)m_Rm, ToUnsafe(option), defValue);
+            return (int) RmReadFormula((void*) _mRm, ToUnsafe(option), defValue);
         }
 
         public unsafe string ReplaceVariables(string str)
         {
-            char* value = RmReplaceVariables((void*)m_Rm, ToUnsafe(str));
+            char* value = RmReplaceVariables((void*) _mRm, ToUnsafe(str));
             return new string(value);
         }
 
         public unsafe string GetMeasureName()
         {
-            char* value = (char*)RmGet((void*)m_Rm, 0);
+            var value = (char*) RmGet((void*) _mRm, 0);
             return new string(value);
         }
 
         public unsafe IntPtr GetSkin()
         {
-            return (IntPtr)RmGet((void*)m_Rm, 1);
+            return (IntPtr) RmGet((void*) _mRm, 1);
         }
 
         public unsafe string GetSettingsFile()
         {
-            char* value = (char*)RmGet((void*)m_Rm, 2);
+            var value = (char*) RmGet((void*) _mRm, 2);
             return new string(value);
         }
 
         public unsafe string GetSkinName()
         {
-            char* value = (char*)RmGet((void*)m_Rm, 3);
+            var value = (char*) RmGet((void*) _mRm, 3);
             return new string(value);
         }
 
         public unsafe IntPtr GetSkinWindow()
         {
-            return (IntPtr)RmGet((void*)m_Rm, 4);
+            return (IntPtr) RmGet((void*) _mRm, 4);
         }
 
         public static unsafe void Execute(IntPtr skin, string command)
         {
-            RmExecute((void*)skin, ToUnsafe(command));
+            RmExecute((void*) skin, ToUnsafe(command));
         }
 
         public static unsafe void Log(LogType type, string message)
         {
-            LSLog((int)type, null, ToUnsafe(message));
-        }
-    }
-
-    /// <summary>
-    /// Dummy attribute to mark method as exported for DllExporter.exe.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class DllExport : Attribute
-    {
-        public DllExport()
-        {
+            LSLog((int) type, null, ToUnsafe(message));
         }
     }
 }
