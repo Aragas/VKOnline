@@ -18,6 +18,12 @@ namespace Rainmeter.Forms
         /// </summary>
         public static string Id;
 
+        public static bool TokenIdExist
+        {
+            get { return (Token != null || Id != null); }
+        }
+
+
         private OAuth()
         {
             InitializeComponent();

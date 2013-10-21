@@ -7,33 +7,66 @@ namespace Rainmeter.Information
 {
     public static class Info
     {
+        private static int _friendsCount;
         private static int FriendsCount
         {
             get
             {
-                return Measure.FriendsCount;
+                if (_friendsCount == 0)
+                    return GetFriendsCount();
+
+                return _friendsCount;
             }
         }
 
+        private static string _token;
         private static string Token 
         {
             get
             {
-                return OAuth.Token;
+                if (_token == null)
+                    return GetToken();
+                return _token;
             }
         }
 
+        private static string _id;
         private static string Id
         {
             get
             {
-                return OAuth.Id;
+                if (_id == null)
+                    return GetId();
+                return _id;
             }
         }
 
-        private static bool TokenIdExists
+        private static string GetToken()
         {
-            get { return (OAuth.Token != null || OAuth.Id != null); }
+            if (!OAuth.TokenIdExist)
+            {
+                OAuth.OAuthRun();
+                return OAuth.Token;
+            }
+
+            return OAuth.Token;
+        }
+
+        private static string GetId()
+        {
+            if (!OAuth.TokenIdExist)
+            {
+                OAuth.OAuthRun();
+                return OAuth.Id;
+            }
+
+            return OAuth.Id;
+
+        }
+
+        private static int GetFriendsCount()
+        {
+            return Convert.ToInt32(Measure.FriendsCount);
         }
 
         private static readonly Friends Friends = new Friends();
@@ -42,61 +75,60 @@ namespace Rainmeter.Information
         #region UserData
 
         private static string[] _userArray;
-        private static string[] _userData = new string[5];
-
-        private static bool UserArrayExists
-        {
-            get { return _userArray != null; }
-        }
-
         private static string[] UserArray
         {
             get
             {
-                if (UserArrayExists) return _userArray;
-                if (!TokenIdExists) OAuth.OAuthRun();
+                if (_userArray != null) 
+                    return _userArray;
+
                 Friends.Token = Token;
                 Friends.Id = Id;
                 Friends.Count = FriendsCount;
+
                 _userArray = Friends.OnlineString();
                 return _userArray;
             }
         }
 
-        public static string[] UserData(int user)
+        private static string[] _friendsUserData = new string[4];
+        public static string[] FriendsUserData(int user)
         {
-            int i = (user*5)-1;
-            _userData[0] = UserArray[i + 2] + " " + UserArray[i + 3];    // First Last Name.
-            _userData[1] = UserArray[i + 1];    // Friend Id.
-            _userData[2] = UserArray[i + 4];    // Photo Url.
-            _userData[3] = UserArray[i + 5];    // Online or Online_m. 
-            return _userData;
+            if (user <= 0)
+                user = 1;
+            int i = (user*5)-5;
+            _friendsUserData[0] = UserArray[i + 1] + " " + UserArray[i + 2];   // First Last Name.
+            _friendsUserData[1] = UserArray[i + 0];                            // Friend Id.
+            _friendsUserData[2] = UserArray[i + 3];                            // Photo Url.
+            _friendsUserData[3] = UserArray[i + 4];                            // Online or Mobile. 
+            return _friendsUserData;
         }
 
         #endregion
 
         #region Messages
 
-        private static bool UnReadExists = false;
-        private static int _unRead;
-
-        public static int UnReadCount
+        private static string _messagesUnReadCount;
+        public static int MessagesUnReadCount
         {
             get
             {
-                if (UnReadExists) return _unRead;
-                if (!TokenIdExists) OAuth.OAuthRun();
+                if (_messagesUnReadCount != null) return Convert.ToInt32(_messagesUnReadCount);
+
                 Messages.Token = Token;
                 Messages.Id = Id;
-                _unRead = Messages.UnReadMessages();
+                _messagesUnReadCount = Convert.ToString(Messages.UnReadMessages());
 
-                UnReadExists = true;
-
-                return _unRead;
+                return Convert.ToInt32(_messagesUnReadCount);
             }
         }
 
         #endregion
 
+        public static void Update()
+        {
+            _friendsUserData = null;
+            _messagesUnReadCount = null;
+        }
     }
 }

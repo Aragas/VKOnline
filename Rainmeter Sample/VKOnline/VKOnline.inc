@@ -1,201 +1,208 @@
 [Variables] 
-URL=file://%APPDATA%\Rainmeter\Plugins\VKPlugin\OnlineUsers.tmp
+;URL=file://%APPDATA%\Rainmeter\Plugins\VKPlugin\OnlineUsers.tmp
 URL1=http://vk.com
 URL2=http://vk.com/images/camera_c.gif
 FontColor=255, 255, 255, 255
 FontColorOn=128, 192, 255, 255
-
-[MeasureInfo]
-Measure=Plugin
-Plugin=Plugins\WebParser.dll
-Url=#URL#
-RegExp="(?siU)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&(.*)&.*"
------------------------------------------------------------------------------------
-
-[MeasurePlugin]
-Measure=Plugin
-Plugin=VKPlugin.dll
-Type=OnlineInfo
-
------------------------------------------------------------------------------------
+UPDATE=-1
 
 [MeasureMessages]
 Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=26
+Plugin=VKOnline.dll
+InfoType=Messages
 RegExpSubstitute=1
-Substitute="1":"message.png","0":""
+Substitute="1":"Message.png","0":""
+
+[MeasureName1]
+Measure=Plugin
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Name
+FriendsCount=5
+UserType=1
+
+[MeasureName2]
+Measure=Plugin
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Name
+UserType=2
+
+[MeasureName3]
+Measure=Plugin
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Name
+UserType=3
+
+[MeasureName4]
+Measure=Plugin
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Name
+UserType=4
+
+[MeasureName5]
+Measure=Plugin
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Name
+UserType=5
 
 -----------------------------------------------------------------------------------
 
 [MeasureUID1]
 Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=1
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Id
+UserType=1
 
 [MeasureUID2]
 Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=6
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Id
+UserType=2
 
 [MeasureUID3]
 Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=11
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Id
+UserType=3
 
 [MeasureUID4]
 Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=16
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Id
+UserType=4
 
 [MeasureUID5]
 Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=21
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Id
+UserType=5
 ==========================================
 
 [MeasureOnlineIcon1]
 Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=5
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Status
+UserType=1
 RegExpSubstitute=1
-Substitute="1":"Online\mobile.png","0":""
+Substitute="Online":"", "Mobile":"Resources\Mobile.png"
 
 [MeasureOnlineIcon2]
 Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=10
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Status
+UserType=2
 RegExpSubstitute=1
-Substitute="1":"Online\mobile.png","0":""
+Substitute="Online":"", "Mobile":"Resources\Mobile.png"
 
 [MeasureOnlineIcon3]
 Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=15
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Status
+UserType=3
 RegExpSubstitute=1
-Substitute="1":"Online\mobile.png","0":""
+Substitute="Online":"", "Mobile":"Resources\Mobile.png"
 
 [MeasureOnlineIcon4]
 Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=20
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Status
+UserType=4
 RegExpSubstitute=1
-Substitute="1":"Online\mobile.png","0":""
+Substitute="Online":"", "Mobile":"Resources\Mobile.png"
 
 [MeasureOnlineIcon5]
 Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=25
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Status
+UserType=5
 RegExpSubstitute=1
-Substitute="1":"Online\mobile.png","0":""
+Substitute="Online":"", "Mobile":"Resources\Mobile.png"
 ==========================================
+[Image1]
+Measure=Plugin
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Photo
+UserType=1
+
+[Image2]
+Measure=Plugin
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Photo
+UserType=2
+
+[Image3]
+Measure=Plugin
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Photo
+UserType=3
+
+[Image4]
+Measure=Plugin
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Photo
+UserType=4
+
+[Image5]
+Measure=Plugin
+Plugin=VKOnline.dll
+InfoType=Friends
+FriendType=Photo
+UserType=5
 
 [MeasureImage1]
 Measure=Plugin
 Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=4
+Url=[&Image1]
 Download=1
+DownloadFile="image1.jpg"
 
 [MeasureImage2]
 Measure=Plugin
 Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=9
+Url=[&Image2]
 Download=1
+DownloadFile="image2.jpg"
 
 [MeasureImage3]
 Measure=Plugin
 Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=14
+Url=[&Image3]
 Download=1
+DownloadFile="image3.jpg"
 
 [MeasureImage4]
 Measure=Plugin
 Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=19
+Url=[&Image4]
 Download=1
+DownloadFile="image4.jpg"
 
 [MeasureImage5]
 Measure=Plugin
 Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=24
+Url=[&Image5]
 Download=1
+DownloadFile="image5.jpg"
 ==========================================
 
-[MeasureFName1]
-Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=2
-
-[MeasureFName2]
-Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=7
-
-[MeasureFName3]
-Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=12
-
-[MeasureFName4]
-Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=17
-
-[MeasureFName5]
-Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=22
-
-[MeasureLName1]
-Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=3
-
-[MeasureLName2]
-Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=8
-
-[MeasureLName3]
-Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=13
-
-[MeasureLName4]
-Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=18
-
-[MeasureLName5]
-Measure=Plugin
-Plugin=Plugins/WebParser.dll
-Url=[MeasureInfo]
-StringIndex=23
 -----------------------------------------------------------------------------------
 
 [TitleVK]
@@ -219,7 +226,7 @@ FontFace=Calibri
 FontSize=11
 FontColor=247,247,247,255
 AntiAlias=1
-Text=%1 %2
+Text=%1
 ClipString=1
 StringStyle=BOLD
 W=200
@@ -232,38 +239,33 @@ MouseLeaveAction=[!SetOption "#CURRENTSECTION#" "FontColor" "#FontColor#"][!Upda
 [MeterName1]
 Meter=String
 MeterStyle=StyleNames
-MeasureName=MeasureFName1
-MeasureName2=MeasureLName1
+MeasureName=MeasureName1
 Y=20
 LeftMouseUpAction=["http://vk.com/id[MeasureUID1]"]
 
 [MeterName2]
 Meter=String
 MeterStyle=StyleNames
-MeasureName=MeasureFName2
-MeasureName2=MeasureLName2
+MeasureName=MeasureName2
 LeftMouseUpAction=["http://vk.com/id[MeasureUID2]"]
 
 [MeterName3]
 Meter=String
 MeterStyle=StyleNames
-MeasureName=MeasureFName3
-MeasureName2=MeasureLName3
+MeasureName=MeasureName3
 LeftMouseUpAction=["http://vk.com/id[MeasureUID3]"]
 
 [MeterName4]
 Meter=String
 MeterStyle=StyleNames
-MeasureName=MeasureFName4
-MeasureName2=MeasureLName4
+MeasureName=MeasureName4
 LeftMouseUpAction=["http://vk.com/id[MeasureUID4]"]
 
 
 [MeterName5]
 Meter=String
 MeterStyle=StyleNames
-MeasureName=MeasureFName5
-MeasureName2=MeasureLName5
+MeasureName=MeasureName5
 LeftMouseUpAction=["http://vk.com/id[MeasureUID5]"]
 ==========================================
 
@@ -307,28 +309,28 @@ Y=45r
 
 [MeterImage1]
 Meter=IMAGE
-MeasureName=MeasureImage1
+ImageName=#CURRENTPATH#\DownloadFile\image1.jpg
 MeterStyle=StyleImages
 Y=10
 
 [MeterImage2]
 Meter=IMAGE
-MeasureName=MeasureImage2
+ImageName=#CURRENTPATH#\DownloadFile\image2.jpg
 MeterStyle=StyleImages
 
 [MeterImage3]
 Meter=IMAGE
-MeasureName=MeasureImage3
+ImageName=#CURRENTPATH#\DownloadFile\image3.jpg
 MeterStyle=StyleImages
 
 [MeterImage4]
 Meter=IMAGE
-MeasureName=MeasureImage4
+ImageName=#CURRENTPATH#\DownloadFile\image4.jpg
 MeterStyle=StyleImages
 
 [MeterImage5]
 Meter=IMAGE
-MeasureName=MeasureImage5
+ImageName=#CURRENTPATH#\DownloadFile\image5.jpg
 MeterStyle=StyleImages
 ==========================================
 

@@ -55,6 +55,7 @@
             this.Controls.Add(this.webBrowser1);
             this.DoubleBuffered = true;
             this.Name = "OAuth";
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.ResumeLayout(false);
 
         }
