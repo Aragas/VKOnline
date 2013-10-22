@@ -72,7 +72,7 @@ namespace Rainmeter.Plugin
             switch (_infoType)
             {
                 case InfoType.Messages:
-                    return (double)Info.MessagesUnReadCount;
+                    return (Info.MessagesUnReadCount >= 1) ? 1 : 0;
             }
             return 0.0;
         }

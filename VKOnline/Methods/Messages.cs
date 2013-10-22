@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace Rainmeter.Methods
@@ -18,8 +20,8 @@ namespace Rainmeter.Methods
         public int UnReadMessages()
         {
             // Параметры.
-            const string method = "messages.get.xml?";
-            const string param = "&filters=1";
+            const string method = "account.getCounters.xml?";
+            const string param = "&filter=messages";
 
             XmlDocument doc = new XmlDocument();
             doc.Load("https://api.vk.com/method/" + method + param + "&access_token=" + Token);
@@ -43,9 +45,12 @@ namespace Rainmeter.Methods
 
             try
             {
-                countstring = root["count"].InnerText;
+                countstring = root["messages"].InnerText;
             }
-            catch { }
+            catch
+            {
+                Debug.Write("Message Error");
+            }
 
             return Convert.ToInt32(countstring);
         }
